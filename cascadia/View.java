@@ -4,6 +4,7 @@ package cascadia;
 import java.util.*;
 
 public class View {
+    //Game Introduction
     Scanner in = new Scanner(System.in);
     public void GameStartMessage(){
         System.out.println("\nWELCOME TO CASCADIA!");
@@ -14,6 +15,7 @@ public class View {
         System.out.println("\nLet's start! How many players are playing? Please enter number 2-4.");
     }
 
+    //Gets number of players
     public int getPlayers(){
         int playerAmount = 0;
         do{
@@ -25,11 +27,12 @@ public class View {
         return playerAmount;
     }
 
+    //Error Handling
     public void displayInvalidAction(){
         System.out.println("Invalid input, please try again.");
     }
 
-
+    //Gets Player names
     public void namePlayers(Player[] playerList) {
         String username;
         System.out.println("Please enter each player's name:");
@@ -39,11 +42,12 @@ public class View {
             playerList[i] = p;
         }
     }
-    public void playOrder(){
+    /*public void playOrder(){
         Collections.shuffle(playerList);
         for(int i = 1; i <= playerAmount; i++){
             System.out.println(i + ". " + playerList(i));
         }
-    }
+    }*/
 }
+
 
