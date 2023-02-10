@@ -9,7 +9,7 @@ public class View {
     public void GameStartMessage(){
         System.out.println("\nWELCOME TO CASCADIA!");
         System.out.println("\nAbout the Game:");
-        System.out.println("In Cascadia, players compete to create the most diverse environment using Habitat Tiles and Wildlife Tokens.");
+        System.out.println("In Cascadia, players use  Habitat Tiles and Wildlife Tokens to compete to create the most diverse environment.");
         System.out.println("Scoring is calculated from combinations of different objectives linked to each wildlife species.");
         System.out.println("The goal of the game is to build out habitats and populate them with the best wildlife in order to create a harmonious ecosystem.\n");
         System.out.println("\nLet's start! How many players are playing? Please enter number 2-4.");
