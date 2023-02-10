@@ -39,4 +39,11 @@ public class View {
             playerList[i] = p;
         }
     }
+    public void playOrder(){
+        Collections.shuffle(playerList);
+        for(int i = 1; i <= playerAmount; i++){
+            System.out.println(i + ". " + playerList(i));
+        }
+    }
 }
+
