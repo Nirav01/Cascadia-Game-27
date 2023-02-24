@@ -77,7 +77,7 @@ public class View {
         return playerList;
     }
 
-
+    //Random the player order
     public String[] playOrder(String[] playerList) {
         Random rand = new Random();
         for (int i = playerList.length - 1; i > 0; i--) {
@@ -89,6 +89,7 @@ public class View {
         return playerList;
     }
 
+    //Print the order the player is got to play
     public void printPlayerList(String[] playerList) {
         System.out.println("The player list is:");
         for (int i = 0; i < playerList.length; i++){
@@ -96,21 +97,26 @@ public class View {
         }
     }
 
-    public void nextPlayerHabitat() {
-        System.out.println("Enter \"next\" to see next player's habitat and \"no\" to continue");
-        String input = in.nextLine().toString();
+    //Function to get next token and terminate the program
+    public void nextQuitPlayerHabitat() {
+        System.out.println("Enter \"next\" to see next player's habitat and \"quit\" to exit the program");
+        String input = in.nextLine();
         if (input == "next"){
             System.out.println(in.next());
         }
-        else if (input == "no"){
-            System.out.println(input);
+        else if (input == "quit"){
+            System.exit(0);
         }
         else{
             displayInvalidAction();
         }
-        return input;
+    }
+
+    public void habitatTile(){
+
+    }
+
+    public void wildlifeTokens(){
+
     }
 }
-
-
-
