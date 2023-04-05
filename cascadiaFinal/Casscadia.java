@@ -211,4 +211,266 @@ String userName;
             }
         };
 
-        
+        frame.add(pn);
+        frame.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+            @Override
+            public void mousePressed(MouseEvent e) { //code that controls what happens when the mouse if pressed at different locations in the window
+                int x;  //used to find x co-ordinate of the tile you have clicked on the grid
+                int y = Math.floorDiv((e.getY()), 64); //used to find y co-ordinate of the tile you have clicked on the grid
+                if (e.getX()<32){
+                    x=9;
+                }
+                else if (y%2!=0){
+                    x = Math.floorDiv(e.getX()-32, 64);
+                }
+                else{x = Math.floorDiv(e.getX(), 64);}
+
+              if (hello.currentHabitat != null && x < 8 && y < 8 && hello.Players.get(hello.PlayerTurn).Board[x][y] == null && hello.Players.get(hello.PlayerTurn).canPlace(x,y)) { //code to place a habitat card
+                    BoardTile newtile = null;
+                    try {
+                        newtile = new BoardTile(hello.currentHabitat, x, y,hello.currentRotation);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    hello.Players.get(hello.PlayerTurn).Board[x][y] = newtile;
+                    hello.Players.get(hello.PlayerTurn).allTiles.add(newtile);
+                    hello.currentAnimal = hello.AnimalCards.get(animalIndex);
+                    frame.repaint();
+                    hello.currentHabitat = null;
+                    hello.currentRotation=0;
+                    hello.CurrentText = ("Please place " + hello.currentAnimal.AnimalName+" or use a wildlife token");
+                } else if (hello.currentAnimal != null && x < 8 && y < 8 && hello.Players.get(hello.PlayerTurn).Board[x][y] != null && hello.Players.get(hello.PlayerTurn).Board[x][y].isAnimal == false) { //code to place an animal card
+                    if (hello.Players.get(hello.PlayerTurn).Board[x][y].habitat.isPossible((hello.currentAnimal)) == true) {
+                        hello.Players.get(hello.PlayerTurn).Board[x][y].addAnimal(hello.currentAnimal);
+                        for (int z = 0; z < hello.Players.get(hello.PlayerTurn).allTiles.size(); z++) {
+                            if (hello.Players.get(hello.PlayerTurn).allTiles.get(z).X == x && hello.Players.get(hello.PlayerTurn).allTiles.get(z).Y == y) {
+                                hello.Players.get(hello.PlayerTurn).allTiles.get(z).addAnimal(hello.currentAnimal);
+                                hello.Players.get(hello.PlayerTurn).allTiles.get(z).isAnimal = true;
+                            }
+                        }
+                        if (hello.Players.get(hello.PlayerTurn).Board[x][y].habitat.habitat2==Habitatselect.none){
+                            hello.Players.get(hello.PlayerTurn).wildlifeTokens++;
+                        }
+                        hello.HabitatCards.remove(animalIndex);
+                        hello.AnimalCards.remove(animalIndex);
+                        frame.repaint();
+                        hello.currentAnimal = null;
+                        hello.plusPlayerTurn();
+
+                    } else {
+                        hello.CurrentText=("You can't Place "+ hello.currentAnimal.AnimalName+ " here");
+                        frame.repaint();
+                    }
+
+                } else if (hello.currentAnimal == null && hello.useWildlifeToken==false) { //code to select current habitat
+                    if (e.getX() > 154 && e.getX() < 216 && e.getY() > 518 && e.getY() < 580) {
+                        hello.currentHabitat = hello.HabitatCards.get(0);
+                        animalIndex = 0;
+                        hello.CurrentText = (hello.currentHabitat.getHabitatName() + " is selected");
+
+
+                        frame.repaint();
+                    } else if (e.getX() > 218 && e.getX() < 280 && e.getY() > 518 && e.getY() < 580) {
+                        hello.currentHabitat = hello.HabitatCards.get(1);
+                        animalIndex = 1;
+                        hello.CurrentText = (hello.currentHabitat.getHabitatName() + " is selected");
+                        frame.repaint();
+                    } else if (e.getX() > 282 && e.getX() < 348 && e.getY() > 518 && e.getY() < 580) {
+                        hello.currentHabitat = hello.HabitatCards.get(2);
+                        animalIndex = 2;
+                        hello.CurrentText = (hello.currentHabitat.getHabitatName() + " is selected");
+                        frame.repaint();
+                    } else if (e.getX() > 350 && e.getX() < 412 && e.getY() > 518 && e.getY() < 580) {
+                        hello.currentHabitat = hello.HabitatCards.get(3);
+                        animalIndex = 3;
+                        hello.CurrentText = (hello.currentHabitat.getHabitatName() + " is selected");
+                        frame.repaint();
+                    }
+                }
+                else if (hello.currentAnimal == null && hello.useWildlifeToken==true) { //code when a wildlife token is used
+                    if (e.getX() > 154 && e.getX() < 186 && e.getY() > 576 && e.getY() < 608) {
+                        hello.currentAnimal = hello.AnimalCards.get(0);
+                        animalIndex = 0;
+                        hello.CurrentText = (hello.currentAnimal.getAnimalName() + " is selected");
+                        frame.repaint();
+                    } else if (e.getX() > 218 && e.getX() < 250 && e.getY() > 576 && e.getY() < 608) {
+                        hello.currentAnimal = hello.AnimalCards.get(1);
+                        animalIndex = 1;
+                        hello.CurrentText = (hello.currentAnimal.getAnimalName() + " is selected");
+                        frame.repaint();
+                    } else if (e.getX() > 282 && e.getX() < 304 && e.getY() > 576 && e.getY() < 608) {
+                        hello.currentAnimal = hello.AnimalCards.get(2);
+                        animalIndex = 2;
+                        hello.CurrentText = (hello.currentAnimal.getAnimalName() + " is selected");
+                        frame.repaint();
+                    } else if (e.getX() > 350 && e.getX() < 382 && e.getY() > 576 && e.getY() < 608) {
+                        hello.currentAnimal = hello.AnimalCards.get(3);
+                        animalIndex = 3;
+                        hello.CurrentText = (hello.currentAnimal.getAnimalName() + " is selected");
+                        frame.repaint();
+                    }
+                    hello.useWildlifeToken=false;
+                    hello.Players.get(hello.PlayerTurn).wildlifeTokens--;
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        frame.setVisible(true);
+
+    }
+
+    public void Initialprompt() throws IOException {   //Game Set-up
+        Scanner NumPlayersScanner = new Scanner(System.in);  // Create a Scanner object
+        System.out.println("Enter number of players (2-4): ");
+        NumPLayers = NumPlayersScanner.nextInt(); //asks user to input number of players
+        if (NumPLayers < 2 || NumPLayers > 4) {
+            throw new IllegalArgumentException("Incorrect number of users");
+        }
+        switch (NumPLayers) { //stores number of habitat tiles neccessary
+            case 2:
+                NumhabitatTiles = 43;
+            case 3:
+                NumhabitatTiles = 63;
+            case 4:
+                NumhabitatTiles = 83;
+        }
+
+        CreateTiles();
+
+        for (int i = 0; i < NumPLayers; i++) {
+if (i<1) {
+    Scanner PlayerNameScanner = new Scanner(System.in);  //Create a Scanner object
+    System.out.println("Enter the name for player " + (i + 1) + ":"); //User inputs Name
+    userName = PlayerNameScanner.nextLine();
+    Players.add(new Player(userName));
+    if (userName.equals("S") || userName.equals("s")) {
+        System.out.println("Player " + (i + 1) + "'s name is: " + userName + "\n");  //Output user input
+
+    } else {
+        System.out.println("Player " + (i + 1) + "'s name is: " + userName + "\n");  //Output user input
+    }
+    turnInfo=userName+"'s turn ";
+}
+else {
+    Scanner PlayerNameScanner = new Scanner(System.in);  // Create a Scanner object
+    System.out.println("Enter the name for player " + (i + 1) +" :"); //User inputs Name
+    userName = PlayerNameScanner.nextLine();
+    Players.add(new Player(userName));
+    if (userName.equals("S") || userName.equals("s")) {
+        System.out.println("Player " + (i + 1) + "'s name is: " + userName + "\n");  //Output user input
+    } else {
+        System.out.println("Player " + (i + 1) + "'s name is: " + userName + "\n");  //Output user input
+    }
+}
+        }
+        Collections.shuffle(Players);
+        System.out.println("Order of Players:");
+        for (int i = 0; i < NumPLayers; i++) {
+            System.out.println(Players.get(i).getName()); //Shows order of Players
+        }
+    }
+
+    public void CreateTiles() throws IOException {          //Creates Array lists for animal and habitat Tiles needed to play Casscadia
+        for (int i = 0; i < 20; i++) { //adding animal tiles to list
+            AnimalCards.add(new Animal(Animalselect.Hawk));
+            AnimalCards.add(new Animal(Animalselect.Bear));
+            AnimalCards.add(new Animal(Animalselect.Elk));
+            AnimalCards.add(new Animal(Animalselect.Salmon));
+            AnimalCards.add(new Animal(Animalselect.Fox));
+        }
+        for (int l = 0; l < 5; l++) { //adding keystone tiles to list
+            HabitatCards.add(new Habitat(Habitatselect.forest, Habitatselect.none));
+            HabitatCards.add(new Habitat(Habitatselect.wetland, Habitatselect.none));
+            HabitatCards.add(new Habitat(Habitatselect.river, Habitatselect.none));
+            HabitatCards.add(new Habitat(Habitatselect.mountain, Habitatselect.none));
+            HabitatCards.add(new Habitat(Habitatselect.prairie, Habitatselect.none));
+        }
+        int m=0;
+        while (m<NumhabitatTiles-25){ //creates random habitat tiles with more than 1 habitat on them
+            Random rand = new Random();
+            int selectingHabitat1 = rand.nextInt(4);
+            int selectingHabitat2 = rand.nextInt(4);
+            if (selectingHabitat1!=selectingHabitat2){
+            Habitat newpick = new Habitat(Casscadia.Habitatselect.values()[selectingHabitat1],Casscadia.Habitatselect.values()[selectingHabitat2]);
+            HabitatCards.add(newpick);
+            m++;
+            }
+        }
+    }
+
+    public void Turn() { //code that at the begining of the game which shuffles cards and checks if a reshuffle is available
+        Collections.shuffle(HabitatCards);
+        int animalReshuffleCheck = 0;
+        Collections.shuffle(AnimalCards);
+        for (int l = 0; l < 4; l++) {
+            animalReshuffleCheck = 0;
+            for (int i = 0; i < 2; i++) {
+                if (AnimalCards.get(l).getAnimalName().equals(AnimalCards.get(i).AnimalName)) {
+                    animalReshuffleCheck++;     //checks how many of each animal appear each turn
+                }
+            }
+            if (animalReshuffleCheck == 4 || animalReshuffleCheck == 3) {
+                canReshuffle = true;
+            }
+        }
+    }
+
+    public void ReshuffleCheck() {
+        int animalReshuffleCheck = 0;
+        for (int l = 0; l < 2; l++) {
+            animalReshuffleCheck = 0;
+            for (int i = 0; i < 4; i++) {
+                if (AnimalCards.get(l).getAnimalName().equals(AnimalCards.get(i).AnimalName)) {
+                    animalReshuffleCheck++;     //checks how many of each animal appear each turn
+                }
+            }
+            if (animalReshuffleCheck == 4 || animalReshuffleCheck == 3) {
+                canReshuffle = true;
+            }
+            else {
+                canReshuffle=false;
+            }
+        }
+
+    }
+
+    public void plusPlayerTurn() { //shuffles cards and moves on to the next player after every turn
+        if (this.PlayerTurn < NumPLayers - 1) {
+            this.PlayerTurn++;
+        } else {
+            PlayerTurn = 0;
+        }
+
+        this.turnInfo = (this.Players.get(this.PlayerTurn).getName() + "'s turn ");
+
+        Collections.shuffle(this.HabitatCards);
+        Collections.shuffle(this.AnimalCards);
+        this.CurrentText="Select a Habitat and Animal or place a habitat and use a wildlife token to choose an animal";
+        turns++;
+    }
+    public void plusRotation() {//code increments current rotation variable and resets to 0 once the number 4 is reached as the cards can only be rotated 4 times(360 degrees)
+        if (this.currentRotation < 3) {
+            this.currentRotation++;
+        } else {
+            currentRotation = 0;
+        }
+    }
+}
